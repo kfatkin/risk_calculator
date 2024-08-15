@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">
+      function sRiskFrom(event) {
+        event.preventDefault()
+        const assetType = document.getElementById('assetType').value
+        const contractDollarValue = document.getElementById('contractDollarValue').value
+        const accountDrawdown = document.getElementById('accountDrawdown').value
+        const stopLossPts = document.getElementById('stopLossPts').value
+        let risk = 0.07
+        if (accountDrawdown <= 5000) {
+          risk = 0.07 * accountDrawdown
+        } else if (accountDrawdown > 5000 && accountDrawdown <= 10000) {
+          risk = 0.05 * accountDrawdown
+        } else {
+          risk = 0.02 * accountDrawdown
+        }
+        let positionSizePrimary = document.getElementById('positionSizePrimary')
+        let positionSizeSecondary = document.getElementById('positionSizeSecondary')
+        let positionSizeTertiary = document.getElementById('positionSizeTertiary')
+        let maxNumOfPositionsForOptions = document.getElementById('maxNumOfPositionsForOptions')
+        let positionSize = risk / (contractDollarValue * stopLossPts)
+        if ( assetType == 'Options') {
+          positionSize = Math.round(risk / stopLossPts)
+          maxNumOfPositionsForOptions.value = Math.round(accountDrawdown / contractDollarValue)
+          positionSizePrimary.value = Math.round(positionSize)
+        } else {
+          positionSizePrimary.value = Math.round(positionSize)
+          positionSizeSecondary.value = Math.round(positionSize / 2)
+          positionSizeTertiary.value = Math.round(positionSize / 4)
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="Risk Form">
+      <h1>Calculate the number of contracts to take based on account size</h1>
+      <form action="" id="riskForm" onsubmit="sRiskFrom(event)">
+      <label for="assetType">Futures or Options?</label>
+      <select name="assetType" id="assetType">
+        <option value="Futures">Futures</option>
+        <option value="Options">Options</option>
+      </select>
+      </br>
+      <label id= "contractDollarValueLabel" for="contractDollarValue">Contract Value Per Point for Futures or Total Cost of Contract for Options</label>
+      <input type="number" id="contractDollarValue" name="contractDollarValue" min="1" max="5000">
+      </br>
+      <label for="accountDrawdown">Drawdown Available</label>
+      <input type="number" id="accountDrawdown" name="accountDrawdown">
+      </br>
+      <label for="stopLossPts">Number of Points Needed for Stop Loss</label>
+      <input type="number" id="stopLossPts" name="stopLossPts">
+      </br>
+      <button type="submit">Submit</button>
+    </form>
+    </div>
+    <div id="Risk Calculation">
+      <br>
+        <label for="positionSizePrimary">Recommended # of contracts for First Entry:</label>
+        <input type="number" id="positionSizePrimary" name="positionSizePrimary" placeholder="0">
+        <br>
+        <label for="positionSizeSecondary">Recommended # of contracts for First Pyramid:</label>
+        <input type="number" id="positionSizeSecondary" name="positionSizeSecondary" placeholder="0">
+        <br>
+        <label for="positionSizeTertiary">Recommended # of contracts for Second Pyramid:</label>
+        <input type="number" id="positionSizeTertiary" name="positionSizeTertiary" placeholder="0">
+        <br>
+        <label for="maxNumOfPositionsForOptions">Max # of Options Contracts you can afford</label>
+        <input type="number" id="maxNumOfPositionsForOptions" name="maxNumOfPositionsForOptions" placeholder="0">
+      </form>
+    </div>
+  </body>
+</html>
+
+
