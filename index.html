@@ -3,13 +3,13 @@
   <head>
     <script type="text/javascript">
       function sRiskFrom(event) {
-        event.preventDefault()
-        const assetType = document.getElementById('assetType').value
-        const contractDollarValue = document.getElementById('contractDollarValue').value
-        const accountDrawdown = document.getElementById('accountDrawdown').value
-        const stopLossPts = document.getElementById('stopLossPts').value
-        const riskPercentage = document.getElementById('risk').value
-        riskPercentage = riskPercentage / 100
+        event.preventDefault();
+        const assetType = document.getElementById('assetType').value;
+        const contractDollarValue = document.getElementById('contractDollarValue').value;
+        const accountDrawdown = document.getElementById('accountDrawdown').value;
+        const stopLossPts = document.getElementById('stopLossPts').value;
+        let risk = document.getElementById('risk').value;
+        risk = (parseFloat(risk).toFixed(2) / 100) * accountDrawdown;
         // let risk = 0.07
         // if (accountDrawdown <= 5000) {
         //   risk = 0.07 * accountDrawdown
@@ -18,11 +18,11 @@
         // } else {
         //   risk = 0.02 * accountDrawdown
         // }
-        let positionSizePrimary = document.getElementById('positionSizePrimary')
-        let positionSizeSecondary = document.getElementById('positionSizeSecondary')
-        let positionSizeTertiary = document.getElementById('positionSizeTertiary')
-        let maxNumOfPositionsForOptions = document.getElementById('maxNumOfPositionsForOptions')
-        let positionSize = risk / (contractDollarValue * stopLossPts)
+        let positionSizePrimary = document.getElementById('positionSizePrimary');
+        let positionSizeSecondary = document.getElementById('positionSizeSecondary');
+        let positionSizeTertiary = document.getElementById('positionSizeTertiary');
+        let maxNumOfPositionsForOptions = document.getElementById('maxNumOfPositionsForOptions');
+        let positionSize = risk / (contractDollarValue * stopLossPts);
         if ( assetType == 'Options') {
           positionSize = Math.round(risk / stopLossPts)
           maxNumOfPositionsForOptions.value = Math.round(accountDrawdown / contractDollarValue)
@@ -31,8 +31,8 @@
           positionSizePrimary.value = Math.round(positionSize)
           positionSizeSecondary.value = Math.round(positionSize / 2)
           positionSizeTertiary.value = Math.round(positionSize / 4)
-        }
-      }
+        };
+      };
     </script>
   </head>
   <body>
@@ -51,8 +51,8 @@
       <label for="accountDrawdown">Drawdown Available</label>
       <input type="number" id="accountDrawdown" name="accountDrawdown">
       </br>
-      <label for="risk">Risk Percentage - Keep number consistent! Recommended 7% for accounts under $5k, 2% for accounts above $10k.</label>
-      <input type="number" id="risk" name="risk" placeholder="7">
+      <label for="risk">Risk Percentage - Keep number consistent!</label>
+      <input type="number" id="risk" name="risk" value="7" min="1" max="100">
       </br>
       <label for="stopLossPts">Number of Points Needed for Stop Loss</label>
       <input type="number" id="stopLossPts" name="stopLossPts">
